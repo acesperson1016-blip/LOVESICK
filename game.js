@@ -938,15 +938,110 @@ function renderDateRound() {
 function answerNormalDate(answer) {
   clearElement($("#date-options"));
 
+  const responses = {
+    "Arcade": `YAN'DE: "An arcade?"
+
+"Okay. But if I win, you owe me another date."`,
+    "Late-night walk": `YAN'DE: "A late-night walk?"
+
+"Just us, then."
+
+"I like that."`,
+
+    "Hold hands": `YAN'DE: "Hold hands?"
+
+"Good."
+
+"I'd rather know exactly where you are."`,
+    "Hug": `YAN'DE: "A hug?"
+
+"Careful."
+
+"I might not let go."`,
+
+    "Yanny": `YAN'DE: "Yanny?"
+
+"...That's awful."
+
+"You can keep using it."`,
+    "De": `YAN'DE: "De..."
+
+"You still remember that name."
+
+"I wasn't expecting that."`,
+
+    "Me": `YAN'DE: "You?"
+
+"Then I get to stay awake and look at you."`,
+    "You": `YAN'DE: "Me?"
+
+"Then you'd better still be there when I wake up."`,
+
+    "Absolutely": `YAN'DE: "You'd steal my hoodie?"
+
+"I think I'd like seeing you wear something that belongs to me."`,
+    "Get your own ♡": `YAN'DE: "Get my own?"
+
+"Cold, Azzy."
+
+"Cute, though."`,
+
+    "Dessert": `YAN'DE: "Dessert."
+
+"Good answer."
+
+"We can share."`,
+    "Cuddles": `YAN'DE: "Cuddles?"
+
+"...You really shouldn't say things like that to me."`,
+
+    "Flowers": `YAN'DE: "Flowers."
+
+"I'd remember your favorite kind."`,
+    "Love letter": `YAN'DE: "A love letter?"
+
+"I could write a lot more than one."`,
+
+    "Yes ♡": `YAN'DE: "A playlist?"
+
+"I'd hide messages in it just to see if you noticed."`,
+    "Only if it's good": `YAN'DE: "Only if it's good?"
+
+"Then you're not allowed to skip anything."`,
+
+    "Go somewhere": `YAN'DE: "Go somewhere."
+
+"Anywhere's fine, as long as I'm the one you're going with."`,
+    "Stay together": `YAN'DE: "Stay together."
+
+"That's my favorite answer so far."`,
+
+    "Maybe...": `YAN'DE: "Maybe?"
+
+"I can work with maybe."`,
+    "I think I could.": `YAN'DE: "...You think you could?"
+
+"Azzy."
+
+"Don't say things like that unless you mean them."`
+  };
+
+  const response =
+    responses[answer] ||
+    `YAN'DE: "Interesting."
+
+"I'll remember that."`;
+
   setDateText(
-    `AZZY: "${answer}"\n\n` +
-    "YAN'DE: \"Cute.\""
+    `AZZY: "${answer}"
+
+${response}`
   );
 
   setTimeout(() => {
     dateRound++;
     renderDateRound();
-  }, 750);
+  }, 1650);
 }
 
 
@@ -13221,5 +13316,398 @@ is only angry because the monster got there first.
       ? "Speech recognition available."
       : "Speech recognition unavailable; audio-level fallback active."
   );
+})();
+
+cd ~/MyVisualNovel/LOVESICK
+
+cat >> game.js <<'EOF'
+
+/* =========================================================
+   LOVESICK — iOS ADD TO HOME SCREEN BUTTON
+   ========================================================= */
+
+(() => {
+  const isIOS =
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (
+      navigator.platform === "MacIntel" &&
+      navigator.maxTouchPoints > 1
+    );
+
+  const isStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+
+  function buildIOSInstallButton() {
+    if (!isIOS || isStandalone) return;
+
+    const titleScreen =
+      document.querySelector("#title-screen");
+
+    if (!titleScreen) return;
+
+    if (
+      document.querySelector(
+        "#lovesick-ios-install-button"
+      )
+    ) {
+      return;
+    }
+
+    const button = document.createElement("button");
+
+    button.id =
+      "lovesick-ios-install-button";
+
+    button.type = "button";
+
+    button.innerHTML = `
+      <span class="ios-install-icon">
+        ⬆
+      </span>
+
+      <span>
+        ADD LOVESICK TO HOME SCREEN
+      </span>
+    `;
+
+    button.addEventListener(
+      "click",
+      openIOSInstallHelp
+    );
+
+    const overlay =
+      titleScreen.querySelector(
+        ".title-overlay"
+      ) || titleScreen;
+
+    overlay.appendChild(button);
+  }
+
+
+  function openIOSInstallHelp() {
+    let overlay =
+      document.querySelector(
+        "#lovesick-ios-install-overlay"
+      );
+
+    if (!overlay) {
+      overlay =
+        document.createElement("div");
+
+      overlay.id =
+        "lovesick-ios-install-overlay";
+
+      overlay.innerHTML = `
+        <div
+          id="lovesick-ios-install-panel"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Install LOVESICK"
+        >
+          <button
+            id="lovesick-ios-install-close"
+            type="button"
+            aria-label="Close"
+          >
+            ×
+          </button>
+
+          <div class="ios-install-heart">
+            ♥
+          </div>
+
+          <h2>
+            KEEP LOVESICK WITH YOU
+          </h2>
+
+          <p>
+            Install LOVESICK like an app
+            on your iPhone or iPad.
+          </p>
+
+          <div class="ios-install-step">
+            <strong>1.</strong>
+            Tap Safari's
+            <b>Share</b> button.
+          </div>
+
+          <div class="ios-install-arrow">
+            ↑
+          </div>
+
+          <div class="ios-install-step">
+            <strong>2.</strong>
+            Choose
+            <b>Add to Home Screen</b>.
+          </div>
+
+          <div class="ios-install-step">
+            <strong>3.</strong>
+            Turn on
+            <b>Open as Web App</b>.
+          </div>
+
+          <div class="ios-install-step">
+            <strong>4.</strong>
+            Tap <b>Add</b>.
+          </div>
+
+          <p class="ios-install-note">
+            Yan'De would probably prefer
+            you didn't delete it. ♡
+          </p>
+        </div>
+      `;
+
+      document.body.appendChild(
+        overlay
+      );
+
+      document
+        .querySelector(
+          "#lovesick-ios-install-close"
+        )
+        .addEventListener(
+          "click",
+          closeIOSInstallHelp
+        );
+
+      overlay.addEventListener(
+        "click",
+        event => {
+          if (event.target === overlay) {
+            closeIOSInstallHelp();
+          }
+        }
+      );
+    }
+
+    overlay.classList.add("visible");
+  }
+
+
+  function closeIOSInstallHelp() {
+    const overlay =
+      document.querySelector(
+        "#lovesick-ios-install-overlay"
+      );
+
+    if (overlay) {
+      overlay.classList.remove(
+        "visible"
+      );
+    }
+  }
+
+
+  const style =
+    document.createElement("style");
+
+  style.id =
+    "lovesick-ios-install-styles";
+
+  style.textContent = `
+
+    #lovesick-ios-install-button {
+      width: min(560px, 92%);
+      margin: 14px auto 0;
+      padding: 14px 18px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+
+      border: 1px solid
+        rgba(255, 90, 160, .65);
+
+      border-radius: 14px;
+
+      background:
+        rgba(15, 10, 20, .86);
+
+      color: #fff;
+
+      font-family:
+        Comfortaa,
+        sans-serif;
+
+      font-weight: 700;
+      letter-spacing: .04em;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 0 18px
+        rgba(255, 70, 150, .14);
+    }
+
+    #lovesick-ios-install-button:hover {
+      transform: translateY(-1px);
+
+      box-shadow:
+        0 0 24px
+        rgba(255, 70, 150, .27);
+    }
+
+    .ios-install-icon {
+      width: 30px;
+      height: 30px;
+
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+
+      border: 2px solid #fff;
+      border-radius: 7px;
+
+      font-size: 21px;
+      line-height: 1;
+    }
+
+    #lovesick-ios-install-overlay {
+      position: fixed;
+      inset: 0;
+
+      z-index: 999999;
+
+      display: none;
+      align-items: center;
+      justify-content: center;
+
+      padding: 20px;
+
+      background:
+        rgba(0, 0, 0, .82);
+
+      backdrop-filter:
+        blur(8px);
+    }
+
+    #lovesick-ios-install-overlay.visible {
+      display: flex;
+    }
+
+    #lovesick-ios-install-panel {
+      position: relative;
+
+      width: min(430px, 95vw);
+
+      padding:
+        30px 24px 26px;
+
+      border:
+        1px solid
+        rgba(255, 85, 155, .8);
+
+      border-radius: 20px;
+
+      background:
+        linear-gradient(
+          180deg,
+          #140d19,
+          #09070d
+        );
+
+      color: white;
+
+      text-align: center;
+
+      box-shadow:
+        0 0 45px
+        rgba(255, 55, 140, .25);
+    }
+
+    #lovesick-ios-install-panel h2 {
+      margin:
+        8px 0 12px;
+
+      font-family:
+        Impact,
+        Haettenschweiler,
+        "Arial Narrow Bold",
+        sans-serif;
+
+      letter-spacing:
+        .05em;
+
+      font-size:
+        clamp(28px, 7vw, 42px);
+    }
+
+    #lovesick-ios-install-close {
+      position: absolute;
+      right: 12px;
+      top: 8px;
+
+      border: 0;
+      background: transparent;
+
+      color: white;
+
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    .ios-install-heart {
+      font-size: 52px;
+
+      color: #ff4f91;
+
+      text-shadow:
+        0 0 20px
+        rgba(255, 79, 145, .65);
+    }
+
+    .ios-install-step {
+      margin: 10px 0;
+
+      padding: 12px;
+
+      border-radius: 12px;
+
+      background:
+        rgba(255, 255, 255, .06);
+
+      text-align: left;
+    }
+
+    .ios-install-arrow {
+      font-size: 25px;
+      color: #ff4f91;
+    }
+
+    .ios-install-note {
+      margin-top: 18px;
+
+      opacity: .72;
+
+      font-size: .86rem;
+    }
+
+  `;
+
+  if (
+    !document.querySelector(
+      "#lovesick-ios-install-styles"
+    )
+  ) {
+    document.head.appendChild(style);
+  }
+
+
+  if (
+    document.readyState === "loading"
+  ) {
+    document.addEventListener(
+      "DOMContentLoaded",
+      buildIOSInstallButton
+    );
+
+  } else {
+    buildIOSInstallButton();
+  }
+
 })();
 
