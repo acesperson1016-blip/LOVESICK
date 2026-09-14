@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LOVESICK</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- LOVESICK PWA -->
+  <link rel="manifest" href="./manifest.webmanifest">
+  <meta name="theme-color" content="#09070d">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="LOVESICK">
+
+</head>
+
+<body>
+  <main id="game">
+    <section id="title-screen" class="screen active">
+      <div class="title-overlay">
+        <h1>LOVESICK</h1>
+        <p>A romance / psychological horror visual novel</p>
+        <button id="start-btn">START</button>
+      </div>
+    </section>
+
+    <section id="name-screen" class="screen">
+      <div class="panel">
+        <h2>What is your name?</h2>
+        <input id="name-input" type="text" autocomplete="off" />
+        <button id="name-submit">ENTER</button>
+      </div>
+    </section>
+
+    <section id="vn-screen" class="screen">
+      <div id="character-area">
+        <img id="character-sprite" alt="" />
+      </div>
+
+      <div id="relationship-hud">
+        <span id="hud-label">YAN'DE</span>
+        <div class="meter">
+          <div id="relationship-fill"></div>
+        </div>
+      </div>
+
+      <div id="dialogue-box">
+        <div id="speaker"></div>
+        <div id="dialogue-text"></div>
+        <div id="choices"></div>
+      </div>
+    </section>
+
+    <section id="date-screen" class="screen">
+      <div class="minigame-panel">
+        <h2>DINNER DATE</h2>
+        <div id="date-question"></div>
+        <div id="date-options"></div>
+
+        <div id="media-zone">
+          <video id="camera-preview" autoplay playsinline muted></video>
+
+          <div id="mic-panel">
+            <div>MIC INPUT</div>
+            <div class="meter">
+              <div id="mic-fill"></div>
+            </div>
+            <div id="mic-percent">0%</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="therapy-screen" class="screen">
+      <div class="minigame-panel">
+        <h2>THERAPY SESSION</h2>
+        <p id="therapy-counter"></p>
+        <p id="therapy-timer"></p>
+
+        <div class="meter insanity-meter">
+          <div id="insanity-fill"></div>
+        </div>
+
+        <p id="insanity-label">YAN'DE INSANITY: 20%</p>
+
+        <button id="fake-calm" class="hidden">
+          CALM YAN'DE DOWN -5%
+        </button>
+
+        <div id="therapy-question"></div>
+        <div id="therapy-options"></div>
+      </div>
+    </section>
+
+    <section id="ending-screen" class="screen">
+      <div class="panel">
+        <h2 id="ending-title"></h2>
+        <p id="ending-text"></p>
+        <p id="achievement"></p>
+        <button id="restart-btn">RETURN TO TITLE</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="game.js"></script>
+
+  <!-- LOVESICK service worker -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("./service-worker.js")
+          .then(function (registration) {
+            console.log(
+              "[LOVESICK] Service worker active:",
+              registration.scope
+            );
+          })
+          .catch(function (error) {
+            console.error(
+              "[LOVESICK] Service worker registration failed:",
+              error
+            );
+          });
+      });
+    }
+  </script>
+
+</body>
+</html>

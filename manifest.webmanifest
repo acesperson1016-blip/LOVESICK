@@ -1,0 +1,19 @@
+{
+  "name": "LOVESICK",
+  "short_name": "LOVESICK",
+  "description": "A romance psychological horror visual novel.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#09070d",
+  "theme_color": "#09070d",
+  "icons": [
+    {
+      "src": "./lovesick-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
