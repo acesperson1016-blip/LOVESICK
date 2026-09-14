@@ -1,4 +1,4 @@
-const CACHE_NAME = "lovesick-cache-v3";
+const CACHE_NAME = "lovesick-cache-v4";
 
 const APP_SHELL = [
   "./",
